@@ -3,10 +3,26 @@ var express = require('express')
 var bodyParser = require('body-parser')
 var request = require('request')
 var app = express()
-const Wit = require('node-wit').Wit;
-const client = new Wit(token, actions);
 
 var nickName = ""
+
+const Wit = require('node-wit').Wit;
+var tokenWit = 'VZUVI3OXYGU3ABATDOC3J5GTGV3NR5MK'
+
+const actions = {
+  say: (sessionId, msg, cb) => {
+    console.log(msg);
+    cb();
+  },
+  merge: (context, entities, cb) => {
+    cb(context);
+  },
+  error: (sessionid, msg) => {
+    console.log('Oops, I don\'t know what to do.');
+  },
+};
+
+const client = new Wit(tokenWit, actions);
 
 
 app.set('port', (process.env.PORT || 5000))
@@ -56,6 +72,13 @@ app.post('/webhook/', function (req, res) {
                 getName(sender, true)
                 continue
             }
+            client.message(text, (error, data) => {
+                if (error) {
+                    console.log("ERROR: " + error)
+                } else {
+                    console.log("YAY response: " + JSON.stringify(data))
+                }
+            })
             sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
         }
         if (event.postback) {
@@ -212,6 +235,10 @@ function sendGenericMessage(sender) {
         }
     })
 }
+
+
+
+
 
 // Spin up the server
 app.listen(app.get('port'), function() {
