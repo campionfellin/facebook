@@ -104,11 +104,17 @@ function chooseName(sender, first, last) {
                 "text": "Select your name!",
                 "buttons": [
                     {
-                        "title": first
+                        "type": "postback",
+                        "title": first,
+                        "payload": {}
                     }, {
-                        "title": "Mr. " + last
+                        "type": "postback",
+                        "title": "Mr. " + last,
+                        "payload": {}
                     }, {
-                        "title": "Mrs. " + last
+                        "type": "postback",
+                        "title": "Mrs. " + last,
+                        "payload": {}
                     }
                 ]
             }
