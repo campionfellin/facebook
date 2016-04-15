@@ -39,7 +39,7 @@ app.post('/webhook/', function (req, res) {
                 sendGenericMessage(sender)
                 continue
             }
-            if (text === 'hi') {
+            if (text === 'hi' || 'hello') {
                 //sendTextMessage(sender, 'Hello')
                 if (nickName !== "") {
                     sendTextMessage(sender, "Hi " + nickName)
@@ -214,3 +214,25 @@ function sendGenericMessage(sender) {
 app.listen(app.get('port'), function() {
     console.log('running on port', app.get('port'))
 })
+
+const Wit = require('node-wit').Wit;
+ 
+const actions = {
+  say: (sessionId, msg, cb) => {
+    console.log(msg);
+    cb();
+  },
+  merge: (context, entities, cb) => {
+    cb(context);
+  },
+  error: (sessionId, msg) => {
+    console.log('Oops, I don\'t know what to do.');
+  },
+  'my-action': (context, cb) => {
+    context['name'] = 'Julien';
+    cb(context);
+  },
+};
+ 
+const client = new Wit('VZUVI3OXYGU3ABATDOC3J5GTGV3NR5MK', actions);
+client.interactive();
