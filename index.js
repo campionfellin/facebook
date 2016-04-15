@@ -51,8 +51,8 @@ app.post('/webhook/', function (req, res) {
             if (text === "change nickname") {
                 nickName = ""
                 getName(sender, true)
+                continue
             }
-
             sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
         }
         if (event.postback) {
