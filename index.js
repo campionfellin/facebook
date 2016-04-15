@@ -106,15 +106,15 @@ function chooseName(sender, first, last) {
                     {
                         "type": "postback",
                         "title": first,
-                        "payload": "hi"
+                        "payload": "Campion"
                     }, {
                         "type": "postback",
                         "title": "Mr. " + last,
-                        "payload": "hi"
+                        "payload": "Mr. Fellin"
                     }, {
                         "type": "postback",
                         "title": "Mrs. " + last,
-                        "payload": "hi"
+                        "payload": "Mrs. Fellin"
                     }
                 ]
             }
