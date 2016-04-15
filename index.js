@@ -67,7 +67,7 @@ function getName(sender) {
         } else if (response.body.error) {
             console.log('Error: ', response.body.error)
         } else {
-            console.log("blahdata: " + body)
+            console.log("blahdata: " + body.response)
         }
     })
 
