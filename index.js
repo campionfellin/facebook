@@ -40,7 +40,7 @@ app.post('/webhook/', function (req, res) {
                 continue
             }
             var greetings = ["hi", "hello", "Hi", "Hello"]
-            if (greetings.contains(text)) {
+            if (greetings.indexOf(text) > -1) {
                 //sendTextMessage(sender, 'Hello')
                 if (nickName !== "") {
                     sendTextMessage(sender, "Hi " + nickName)
