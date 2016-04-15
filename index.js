@@ -68,6 +68,7 @@ function getName(sender) {
             console.log('Error: ', response.body.error)
         } else {
             sendTextMessage(sender, "Hello, " + body.first_name + ". Or should I call you Mr. or Mrs. " + body.last_name + "?")
+            chooseName(sender, body.first_name, body.last_name)
         }
     })
 
@@ -92,6 +93,45 @@ function sendTextMessage(sender, text) {
             console.log('Error: ', response.body.error)
         }
     })
+}
+
+function chooseName(sender, first, last) {
+    messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "button",
+                "text": "Select your name!",
+                "buttons": [
+                    {
+                        "title": first
+                    }, {
+                        "title": "Mr. " + last
+                    }, {
+                        "title": "Mrs. " + last
+                    }
+                ]
+            }
+
+        }
+    }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:token},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+
+
 }
 
 function sendGenericMessage(sender) {
