@@ -40,7 +40,7 @@ app.post('/webhook/', function (req, res) {
                 continue
             }
             if (text === 'hi') {
-                sendTextMessage(sender, 'Hello')
+                //sendTextMessage(sender, 'Hello')
                 if (nickName !== "") {
                     sendTextMessage(sender, "Hi " + nickName)
                 } else {
@@ -48,6 +48,11 @@ app.post('/webhook/', function (req, res) {
                 }
                 continue
             }
+            if (text === "change nickname") {
+                nickName = ""
+                getName(sender)
+            }
+
             sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
         }
         if (event.postback) {
