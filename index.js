@@ -101,7 +101,7 @@ function chooseName(sender, first, last) {
             "type": "template",
             "payload": {
                 "template_type": "button",
-                "text": "Select your name!",
+                //"text": "Select your name!",
                 "buttons": [
                     {
                         "type": "postback",
