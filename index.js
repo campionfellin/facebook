@@ -57,7 +57,7 @@ var token = "CAAQerijGFZCABAO7K5dKeeN9ty24jXnviQ5tYnvVNQaBE2giXqkDajk65ECzRBTZAW
 function getTheirInfo(sender) {
     app.get('https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic&access_token=' + token, function(req, res) {
         sendTextMessage(sender, "hihihihi")
-    })
+    });
 }
 
 function sendTextMessage(sender, text) {
