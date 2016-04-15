@@ -44,13 +44,13 @@ app.post('/webhook/', function (req, res) {
                 if (nickName !== "") {
                     sendTextMessage(sender, "Hi " + nickName)
                 } else {
-                    getName(sender)
+                    getName(sender, false)
                 }
                 continue
             }
             if (text === "change nickname") {
                 nickName = ""
-                getName(sender)
+                getName(sender, true)
             }
 
             sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
@@ -70,7 +70,7 @@ app.post('/webhook/', function (req, res) {
 
 var token = "CAAQerijGFZCABAO7K5dKeeN9ty24jXnviQ5tYnvVNQaBE2giXqkDajk65ECzRBTZAW0wTEDrbejFwlHNw8cTYG0P2Yh8O21FeUycYCSZAG4KHpMKFplbG6y9FYrQzHzz0SEpZABZCRwouQulaar3rjdzxIul8U8OYMnof7kdyn44aRMDlkT589wgdz3dCqgcZD"
 
-function getName(sender) {
+function getName(sender, change) {
     messageData = {}
     request({
         url: 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic&access_token=' + token,
@@ -83,8 +83,13 @@ function getName(sender) {
         } else if (response.body.error) {
             console.log('Error: ', response.body.error)
         } else {
-            sendTextMessage(sender, "Hello, " + body.first_name + ". Or should I call you Mr. or Mrs. " + body.last_name + "?")
-            chooseName(sender, body.first_name, body.last_name)
+            if (change) {
+                sendTextMessage(sender, "Ok, what would you like to change it to?")
+                chooseName(sender, body.first_name, body.last_name)
+            } else {
+                sendTextMessage(sender, "Hello, " + body.first_name + ". Or should I call you Mr. or Mrs. " + body.last_name + "?")
+                chooseName(sender, body.first_name, body.last_name)
+            }
         }
     })
 
