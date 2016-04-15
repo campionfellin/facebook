@@ -4,6 +4,9 @@ var bodyParser = require('body-parser')
 var request = require('request')
 var app = express()
 
+var nickName
+
+
 app.set('port', (process.env.PORT || 5000))
 
 // Process application/x-www-form-urlencoded
@@ -38,7 +41,11 @@ app.post('/webhook/', function (req, res) {
             }
             if (text === 'hi') {
                 sendTextMessage(sender, 'Hello')
-                getName(sender)
+                if (nickName !== "") {
+                    sendTextMessage(sender, "Hi " + nickName)
+                } else {
+                    getName(sender)
+                }
                 continue
             }
             sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
@@ -48,6 +55,7 @@ app.post('/webhook/', function (req, res) {
             textJSON = JSON.parse(text)
 
             sendTextMessage(sender, "OK, I will call you " + textJSON.payload)
+            nickName = textJSON.payload
             //sendTextMessage(sender, "Postback received: " + text.substring(0, 200), token)
             continue
         }
