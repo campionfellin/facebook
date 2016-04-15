@@ -60,7 +60,7 @@ function getName(sender) {
         url: 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic&access_token=' + token,
         qs: {access_token:token},
         method: 'GET',
-        json {}
+        json: {}
     }, function(error, response, body) {
         if (error) {
             console.log('Error getting profile: ', error)
