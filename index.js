@@ -39,7 +39,7 @@ app.post('/webhook/', function (req, res) {
                 sendGenericMessage(sender)
                 continue
             }
-            if (text === 'hi' || 'hello') {
+            if (text === 'hi' || text === 'hello') {
                 //sendTextMessage(sender, 'Hello')
                 if (nickName !== "") {
                     sendTextMessage(sender, "Hi " + nickName)
