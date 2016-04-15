@@ -66,8 +66,11 @@ function getName(sender) {
             console.log('Error getting profile: ', error)
         } else if (response.body.error) {
             console.log('Error: ', response.body.error)
+        } else {
+            console.log("blahdata: " + body)
         }
-    }, data)
+    })
+
 }
 
 function sendTextMessage(sender, text) {
@@ -87,8 +90,6 @@ function sendTextMessage(sender, text) {
             console.log('Error sending messages: ', error)
         } else if (response.body.error) {
             console.log('Error: ', response.body.error)
-        } else {
-            console.log(body)
         }
     })
 }
