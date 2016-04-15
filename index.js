@@ -3,6 +3,8 @@ var express = require('express')
 var bodyParser = require('body-parser')
 var request = require('request')
 var app = express()
+const Wit = require('node-wit').Wit;
+const client = new Wit(token, actions);
 
 var nickName = ""
 
