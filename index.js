@@ -224,7 +224,7 @@ app.listen(app.get('port'), function() {
 // const Wit = require('node-wit').Wit;
 const Wit = require('node-wit').Wit;
 
-const token = (() => {
+const token = 'VZUVI3OXYGU3ABATDOC3J5GTGV3NR5MK' => {
   if (process.argv.length !== 3) {
     console.log('usage: node examples/weather.js <wit-token>');
     process.exit(1);
