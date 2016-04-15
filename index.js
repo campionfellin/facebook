@@ -76,7 +76,7 @@ app.post('/webhook/', function (req, res) {
                 if (error) {
                     console.log("ERROR: " + error)
                 } else {
-                    console.log("YAY response: " + JSON.stringify(data))
+                    sendTextMessage(sender, "YAY response: " + JSON.stringify(data))
                 }
             })
             sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
