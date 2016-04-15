@@ -38,6 +38,7 @@ app.post('/webhook/', function (req, res) {
             }
             if (text === 'hi') {
                 sendTextMessage(sender, 'Hello')
+                getTheirInfo(sender)
                 continue
             }
             sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
@@ -52,6 +53,12 @@ app.post('/webhook/', function (req, res) {
 })
 
 var token = "CAAQerijGFZCABAO7K5dKeeN9ty24jXnviQ5tYnvVNQaBE2giXqkDajk65ECzRBTZAW0wTEDrbejFwlHNw8cTYG0P2Yh8O21FeUycYCSZAG4KHpMKFplbG6y9FYrQzHzz0SEpZABZCRwouQulaar3rjdzxIul8U8OYMnof7kdyn44aRMDlkT589wgdz3dCqgcZD"
+
+function getTheirInfo(sender) {
+    app.get('https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic&access_token=' + token, function(req, res) {
+        sendTextMessage(sender, res)
+    })
+}
 
 function sendTextMessage(sender, text) {
     messageData = {
