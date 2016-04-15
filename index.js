@@ -67,7 +67,7 @@ function getName(sender) {
         } else if (response.body.error) {
             console.log('Error: ', response.body.error)
         } else {
-            sendTextMessage("Hello, " + body.first_name + ". Or should I call you Mr./Mrs. " + body.last_name + "?")
+            sendTextMessage(sender, "Hello, " + body.first_name + ". Or should I call you Mr. or Mrs. " + body.last_name + "?")
         }
     })
 
