@@ -127,13 +127,13 @@ app.post('/webhook/', function (req, res) {
                 getName(sender, true)
                 continue
             }
-            client.message(text, (error, data) => {
+            client.converse('my-user-session-42', 'what is the weather in London?', {}, (error, data) => {
                 if (error) {
-                    console.log("ERROR: " + error)
+                    console.log('Oops! Got an error: ' + error);
                 } else {
-                    sendTextMessage(sender, "YAY response    " + JSON.parse(JSON.stringify(data)))
+                    sendTextMessage(sender, 'Yay, got Wit.ai response: ' + JSON.stringify(data));
                 }
-            })
+            });
             sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
         }
         if (event.postback) {
