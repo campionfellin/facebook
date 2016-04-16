@@ -16,14 +16,6 @@ var tokenWit = 'VZUVI3OXYGU3ABATDOC3J5GTGV3NR5MK'
 // const Wit = require('node-wit').Wit;
 const Wit = require('node-wit').Wit;
 
-const token = (() => {
-  if (process.argv.length !== 3) {
-    console.log('usage: node examples/weather.js <wit-token>');
-    process.exit(1);
-  }
-  return process.argv[2];
-})();
-
 const firstEntityValue = (entities, entity) => {
   const val = entities && entities[entity] &&
     Array.isArray(entities[entity]) &&
@@ -60,7 +52,7 @@ const actions = {
   },
 };
 
-const client = new Wit(token, actions);
+const client = new Wit(tokenWit, actions);
 client.interactive();
 
 
