@@ -7,59 +7,6 @@ var app = express()
 var nickName = ""
 var tokenWit = 'VZUVI3OXYGU3ABATDOC3J5GTGV3NR5MK'
 
-'use strict';
-
-// Quickstart example
-// See https://wit.ai/l5t/Quickstart
-
-// When not cloning the `node-wit` repo, replace the `require` like so:
-// const Wit = require('node-wit').Wit;
-const Wit = require('node-wit').Wit;
-
-const firstEntityValue = (entities, entity) => {
-  const val = entities && entities[entity] &&
-    Array.isArray(entities[entity]) &&
-    entities[entity].length > 0 &&
-    entities[entity][0].value
-  ;
-  if (!val) {
-    return null;
-  }
-  return typeof val === 'object' ? val.value : val;
-};
-
-const actions = {
-  say: (sessionId, msg, cb) => {
-    console.log(msg);
-    cb();
-  },
-  merge: (context, entities, cb) => {
-    // Retrieve the location entity and store it into a context field
-    const loc = firstEntityValue(entities, 'location');
-    if (loc) {
-      context.loc = loc;
-    }
-    cb(context);
-  },
-  error: (sessionId, msg) => {
-    console.log('Oops, I don\'t know what to do.');
-  },
-  'fetch-weather': (context, cb) => {
-    // Here should go the api call, e.g.:
-    // context.forecast = apiCall(context.loc)
-    context.forecast = 'sunny';
-    cb(context);
-  },
-};
-
-const client = new Wit(tokenWit, actions);
-client.interactive();
-
-
-
-
-
-
 /*
 const Wit = require('node-wit').Wit;
 var tokenWit = 'VZUVI3OXYGU3ABATDOC3J5GTGV3NR5MK'
@@ -112,8 +59,8 @@ app.post('/webhook/', function (req, res) {
                 sendGenericMessage(sender)
                 continue
             }
-            var greetings = ["hi", "hello", "Hi", "Hello", "hey", "Hey", "sup", "Sup"]
-            if (greetings.indexOf(text) > -1) {
+            var greetings = ["hi", "hello", "hey", "sup", "whats up", "what's up"]
+            if (greetings.indexOf(text.toLowerCase()) > -1) {
                 //sendTextMessage(sender, 'Hello')
                 if (nickName !== "") {
                     sendTextMessage(sender, "Hi " + nickName)
@@ -122,18 +69,12 @@ app.post('/webhook/', function (req, res) {
                 }
                 continue
             }
-            if (text === "change nickname") {
+            var nameChange = ["change my name", "new name", "new nickname"]
+            if (nameChange.indexOf(text.toLowerCase()) > -1) {
                 nickName = ""
                 getName(sender, true)
                 continue
             }
-            client.converse('my-user-session-42', 'what is the weather in London?', {}, (error, data) => {
-                if (error) {
-                    console.log('Oops! Got an error: ' + error);
-                } else {
-                    sendTextMessage(sender, 'Yay, got Wit.ai response: ' + JSON.stringify(data));
-                }
-            });
             sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
         }
         if (event.postback) {
