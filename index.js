@@ -69,7 +69,7 @@ app.post('/webhook/', function (req, res) {
                 }
                 continue
             }
-            var nameChange = ["change my name", "new name", "new nickname"]
+            var nameChange = ["change my name", "new name", "new nickname", "change nickname"]
             if (nameChange.indexOf(text.toLowerCase()) > -1) {
                 nickName = ""
                 getName(sender, true)
