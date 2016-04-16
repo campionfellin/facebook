@@ -75,6 +75,16 @@ app.post('/webhook/', function (req, res) {
                 getName(sender, true)
                 continue
             }
+            var seahawks = ["go hawks", "sea", "seahawks"]
+            if (seahawks.indexOf(text.toLowerCase()) > -1) {
+                if (text.toLowerCase() === 'sea') {
+                    sendTextMessage(sender, "hawks!")
+                } else {
+                    sendTextMessage(sender, "Go Hawks!")
+                }
+                continue
+            }
+
             sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
         }
         if (event.postback) {
