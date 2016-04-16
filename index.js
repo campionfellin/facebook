@@ -85,7 +85,7 @@ app.post('/webhook/', function (req, res) {
                 continue
             }
 
-            sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
+            sendTextMessage(sender, "I received your message, but I don't know what to do with it, sorry!")
         }
         if (event.postback) {
             text = JSON.stringify(event.postback)
