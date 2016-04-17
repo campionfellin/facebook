@@ -9,7 +9,6 @@ var tokenWit = 'VZUVI3OXYGU3ABATDOC3J5GTGV3NR5MK'
 
 
 const Wit = require('node-wit').Wit;
-var tokenWit = 'VZUVI3OXYGU3ABATDOC3J5GTGV3NR5MK'
 
 const actions = {
   say: (sessionId, msg, cb) => {
