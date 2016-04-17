@@ -111,6 +111,7 @@ const findOrCreateSession = (fbid) => {
 
 // Our bot actions
 const actions = {
+  /*
   say: (sessionId, message, cb) => {
     // Our bot has something to say!
     // Let's retrieve the Facebook user whose session belongs to
@@ -145,6 +146,29 @@ const actions = {
   },
   // You should implement your custom actions here
   // See https://wit.ai/docs/quickstart
+  */
+  say: (sessionId, context, message, cb) => {
+    console.log(message);
+    cb();
+  },
+  merge: (sessionId, context, entities, message, cb) => {
+    // Retrieve the location entity and store it into a context field
+    const loc = firstEntityValue(entities, 'location');
+    if (loc) {
+      context.loc = loc;
+    }
+    cb(context);
+  },
+  error: (sessionId, context, error) => {
+    console.log(error.message);
+  },
+  'fetch-weather': (sessionId, context, cb) => {
+    // Here should go the api call, e.g.:
+    // context.forecast = apiCall(context.loc)
+    context.forecast = 'sunny';
+    cb(context);
+  },
+
 };
 
 // Setting up our bot
@@ -175,7 +199,7 @@ app.post('/fb', (req, res) => {
   const messaging = getFirstMessagingEntry(req.body);
   if (messaging && messaging.message && messaging.recipient.id === FB_PAGE_ID) {
     // Yay! We got a new message!
-    console.log("hihiihiihi");
+
     // We retrieve the Facebook user ID of the sender
     const sender = messaging.sender.id;
 
