@@ -112,7 +112,7 @@ var token = "CAAQerijGFZCABAO7K5dKeeN9ty24jXnviQ5tYnvVNQaBE2giXqkDajk65ECzRBTZAW
 function getName(sender, change) {
     messageData = {}
     request({
-        url: 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic&access_token=' + token,
+        url: 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,gender&access_token=' + token,
         qs: {access_token:token},
         method: 'GET',
         json: {}
@@ -126,7 +126,7 @@ function getName(sender, change) {
                 sendTextMessage(sender, "Ok, what would you like to change it to?")
                 chooseName(sender, body.first_name, body.last_name)
             } else {
-                sendTextMessage(sender, "Hello, " + body.first_name + ". Or should I call you Mr. or Mrs. " + body.last_name + "?")
+                sendTextMessage(sender, "Hello, " + body.first_name + ". Or should I call you Mr. or Mrs. " + body.last_name + "?" + body.gender)
                 chooseName(sender, body.first_name, body.last_name)
             }
         }
