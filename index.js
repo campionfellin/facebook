@@ -147,7 +147,7 @@ const actions = {
   // You should implement your custom actions here
   // See https://wit.ai/docs/quickstart
   */
-  say: (sessionId, context, message, cb) => {
+  say: (sessionId, message, cb) => {
     console.log(message);
     cb();
   },
