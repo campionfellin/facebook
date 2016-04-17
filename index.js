@@ -59,6 +59,7 @@ app.post('/webhook/', function (req, res) {
                 sendGenericMessage(sender)
                 continue
             }
+            /*
             var greetings = ["hi", "hello", "hey", "sup", "whats up", "what's up"]
             if (greetings.indexOf(text.toLowerCase()) > -1) {
                 //sendTextMessage(sender, 'Hello')
@@ -68,7 +69,7 @@ app.post('/webhook/', function (req, res) {
                     getName(sender, false)
                 }
                 continue
-            }
+            }*/
             var nameChange = ["change my name", "new name", "new nickname", "change nickname"]
             if (nameChange.indexOf(text.toLowerCase()) > -1) {
                 nickName = ""
