@@ -1,254 +1,261 @@
-'use strict';
 
-// Messenger API integration example
-// We assume you have:
-// * a Wit.ai bot setup (https://wit.ai/docs/quickstart)
-// * a Messenger Platform setup (https://developers.facebook.com/docs/messenger-platform/quickstart)
-// You need to `npm install` the following dependencies: body-parser, express, request.
-//
-// 1. npm install body-parser express request 
-// 2. Download and install ngrok from https://ngrok.com/download
-// 3. ./ngrok -http 8445
-// 4. WIT_TOKEN=your_access_token FB_PAGE_ID=your_page_id FB_PAGE_TOKEN=your_page_token FB_VERIFY_TOKEN=verify_token node examples/messenger.js
-// 5. Subscribe your page to the Webhooks using verify_token and `https://<your_ngrok_io>/fb` as callback URL.
-// 6. Talk to your bot on Messenger!
+var express = require('express')
+var bodyParser = require('body-parser')
+var request = require('request')
+var app = express()
 
-const bodyParser = require('body-parser');
-const express = require('express');
-const request = require('request');
+var nickName = ""
+var tokenWit = 'VZUVI3OXYGU3ABATDOC3J5GTGV3NR5MK'
 
-// When not cloning the `node-wit` repo, replace the `require` like so:
-// const Wit = require('node-wit').Wit;
+
 const Wit = require('node-wit').Wit;
+var tokenWit = 'VZUVI3OXYGU3ABATDOC3J5GTGV3NR5MK'
 
-// Webserver parameter
-const PORT = process.env.PORT || 8445;
-
-// Wit.ai parameters
-const WIT_TOKEN = 'VZUVI3OXYGU3ABATDOC3J5GTGV3NR5MK'; //process.env.WIT_TOKEN;
-
-// Messenger API parameters
-const FB_PAGE_ID = '1159633264056304' && Number('1159633264056304');//process.env.FB_PAGE_ID && Number(process.env.FB_PAGE_ID);
-if (!FB_PAGE_ID) {
-  throw new Error('missing FB_PAGE_ID');
-}
-const FB_PAGE_TOKEN = 'CAAQerijGFZCABAO7K5dKeeN9ty24jXnviQ5tYnvVNQaBE2giXqkDajk65ECzRBTZAW0wTEDrbejFwlHNw8cTYG0P2Yh8O21FeUycYCSZAG4KHpMKFplbG6y9FYrQzHzz0SEpZABZCRwouQulaar3rjdzxIul8U8OYMnof7kdyn44aRMDlkT589wgdz3dCqgcZD';//process.env.FB_PAGE_TOKEN;
-if (!FB_PAGE_TOKEN) {
-  throw new Error('missing FB_PAGE_TOKEN');
-}
-const FB_VERIFY_TOKEN = 'my_voice_is_my_password_verify_me';//process.env.FB_VERIFY_TOKEN;
-
-// Messenger API specific code
-
-// See the Send API reference
-// https://developers.facebook.com/docs/messenger-platform/send-api-reference
-const fbReq = request.defaults({
-  uri: 'https://graph.facebook.com/me/messages',
-  method: 'POST',
-  json: true,
-  qs: { access_token: FB_PAGE_TOKEN },
-  headers: {'Content-Type': 'application/json'},
-});
-
-const fbMessage = (recipientId, msg, cb) => {
-  const opts = {
-    form: {
-      recipient: {
-        id: recipientId,
-      },
-      message: {
-        text: msg,
-      },
-    },
-  };
-  fbReq(opts, (err, resp, data) => {
-    if (cb) {
-      cb(err || data.error && data.error.message, data);
-    }
-  });
-};
-
-// See the Webhook reference
-// https://developers.facebook.com/docs/messenger-platform/webhook-reference
-const getFirstMessagingEntry = (body) => {
-  const val = body.object == 'page' &&
-    body.entry &&
-    Array.isArray(body.entry) &&
-    body.entry.length > 0 &&
-    body.entry[0] &&
-    body.entry[0].id == FB_PAGE_ID &&
-    body.entry[0].messaging &&
-    Array.isArray(body.entry[0].messaging) &&
-    body.entry[0].messaging.length > 0 &&
-    body.entry[0].messaging[0]
-  ;
-  return val || null;
-};
-
-// Wit.ai bot specific code
-
-// This will contain all user sessions.
-// Each session has an entry:
-// sessionId -> {fbid: facebookUserId, context: sessionState}
-const sessions = {};
-
-const findOrCreateSession = (fbid) => {
-  let sessionId;
-  // Let's see if we already have a session for the user fbid
-  Object.keys(sessions).forEach(k => {
-    if (sessions[k].fbid === fbid) {
-      // Yep, got it!
-      sessionId = k;
-    }
-  });
-  if (!sessionId) {
-    // No session found for user fbid, let's create a new one
-    sessionId = new Date().toISOString();
-    sessions[sessionId] = {fbid: fbid, context: {}};
-  }
-  return sessionId;
-};
-
-// Our bot actions
 const actions = {
-  /*
-  say: (sessionId, message, cb) => {
-    // Our bot has something to say!
-    // Let's retrieve the Facebook user whose session belongs to
-    const recipientId = sessions[sessionId].fbid;
-    if (recipientId) {
-      // Yay, we found our recipient!
-      // Let's forward our bot response to her.
-      fbMessage(recipientId, message, (err, data) => {
-        if (err) {
-          console.log(
-            'Oops! An error occurred while forwarding the response to',
-            recipientId,
-            ':',
-            err
-          );
-        }
-
-        // Let's give the wheel back to our bot
-        cb();
-      });
-    } else {
-      console.log('Oops! Couldn\'t find user for session:', sessionId);
-      // Giving the wheel back to our bot
-      cb();
-    }
-  },
-  merge: (context, entities, cb) => {
-    cb(context);
-  },
-  error: (sessionId, error) => {
-    console.log(error.message);
-  },
-  // You should implement your custom actions here
-  // See https://wit.ai/docs/quickstart
-  */
-  say: (sessionId, message, cb) => {
-    console.log(message);
+  say: (sessionId, msg, cb) => {
+    console.log(msg);
     cb();
   },
   merge: (context, entities, cb) => {
-    // Retrieve the location entity and store it into a context field
-    const loc = firstEntityValue(entities, 'location');
-    if (loc) {
-      context.loc = loc;
-    }
     cb(context);
   },
-  error: (sessionId, error) => {
-    console.log(error.message);
+  error: (sessionid, msg) => {
+    console.log('Oops, I don\'t know what to do.');
   },
-  'fetch-weather': (context, cb) => {
-    // Here should go the api call, e.g.:
-    // context.forecast = apiCall(context.loc)
-    context.forecast = 'sunny';
-    cb(context);
-  },
-
 };
 
-// Setting up our bot
-const wit = new Wit(WIT_TOKEN, actions);
+const client = new Wit(tokenWit, actions);
 
-// Starting our webserver and putting it all together
-const app = express();
-app.set('port', PORT);
-app.listen(app.get('port'));
-app.use(bodyParser.json());
 
-// Webhook setup
-app.get('/fb', (req, res) => {
-  if (!FB_VERIFY_TOKEN) {
-    throw new Error('missing FB_VERIFY_TOKEN');
-  }
-  if (req.query['hub.mode'] === 'subscribe' &&
-    req.query['hub.verify_token'] === FB_VERIFY_TOKEN) {
-    res.send(req.query['hub.challenge']);
-  } else {
-    res.sendStatus(400);
-  }
-});
+app.set('port', (process.env.PORT || 5000))
 
-// Message handler
-app.post('/fb', (req, res) => {
-  // Parsing the Messenger API response
-  const messaging = getFirstMessagingEntry(req.body);
-  if (messaging && messaging.message && messaging.recipient.id === FB_PAGE_ID) {
-    // Yay! We got a new message!
+// Process application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({extended: false}))
 
-    // We retrieve the Facebook user ID of the sender
-    const sender = messaging.sender.id;
+// Process application/json
+app.use(bodyParser.json())
 
-    // We retrieve the user's current session, or create one if it doesn't exist
-    // This is needed for our bot to figure out the conversation history
-    const sessionId = findOrCreateSession(sender);
+// Index route
+app.get('/', function (req, res) {
+    res.send('Hello world, I am a chat bot')
+})
 
-    // We retrieve the message content
-    const msg = messaging.message.text;
-    const atts = messaging.message.attachments;
-
-    if (atts) {
-      // We received an attachment
-
-      // Let's reply with an automatic message
-      fbMessage(
-        sender,
-        'Sorry I can only process text messages for now.'
-      );
-    } else if (msg) {
-      // We received a text message
-
-      // Let's forward the message to the Wit.ai Bot Engine
-      // This will run all actions until our bot has nothing left to do
-      wit.runActions(
-        sessionId, // the user's current session
-        msg, // the user's message 
-        sessions[sessionId].context, // the user's current session state
-        (error, context) => {
-          if (error) {
-            console.log('Oops! Got an error from Wit:', error);
-          } else {
-            // Our bot did everything it has to do.
-            // Now it's waiting for further messages to proceed.
-            console.log('Waiting for futher messages.');
-
-            // Based on the session state, you might want to reset the session.
-            // This depends heavily on the business logic of your bot.
-            // Example:
-            // if (context['done']) {
-            //   delete sessions[sessionId];
-            // }
-
-            // Updating the user's current session state
-            sessions[sessionId].context = context;
-          }
-        }
-      );
+// for Facebook verification
+app.get('/webhook/', function (req, res) {
+    if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
+        res.send(req.query['hub.challenge'])
     }
-  }
-  res.sendStatus(200);
-});
+    res.send('Error, wrong token')
+})
+
+app.post('/webhook/', function (req, res) {
+    messaging_events = req.body.entry[0].messaging
+    for (i = 0; i < messaging_events.length; i++) {
+        event = req.body.entry[0].messaging[i]
+        sender = event.sender.id
+        if (event.message && event.message.text) {
+            text = event.message.text
+            if (text === 'Generic') {
+                sendGenericMessage(sender)
+                continue
+            }
+            /*
+            var greetings = ["hi", "hello", "hey", "sup", "whats up", "what's up"]
+            if (greetings.indexOf(text.toLowerCase()) > -1) {
+                //sendTextMessage(sender, 'Hello')
+                if (nickName !== "") {
+                    sendTextMessage(sender, "Hi " + nickName)
+                } else {
+                    getName(sender, false)
+                }
+                continue
+            }*/
+            var nameChange = ["change my name", "new name", "new nickname", "change nickname"]
+            if (nameChange.indexOf(text.toLowerCase()) > -1) {
+                nickName = ""
+                getName(sender, true)
+                continue
+            }
+            var seahawks = ["go hawks", "sea", "seahawks"]
+            if (seahawks.indexOf(text.toLowerCase()) > -1) {
+                if (text.toLowerCase() === 'sea') {
+                    sendTextMessage(sender, "hawks!")
+                } else {
+                    sendTextMessage(sender, "Go Hawks!")
+                }
+                continue
+            }
+            client.message(text, (error, data) => {
+                if (error) {
+                    console.log('Oops! Got an error: ' + error);
+                } else {
+                    sendTextMessage(sender, 'Yay, got Wit.ai response: ' + JSON.stringify(data));
+                }
+            });
+            sendTextMessage(sender, "I received your message, but I don't know what to do with it, sorry!")
+        }
+        if (event.postback) {
+            text = JSON.stringify(event.postback)
+            textJSON = JSON.parse(text)
+
+            sendTextMessage(sender, "OK, I will call you " + textJSON.payload)
+            nickName = textJSON.payload
+            //sendTextMessage(sender, "Postback received: " + text.substring(0, 200), token)
+            continue
+        }
+    }
+    res.sendStatus(200)
+})
+
+var token = "CAAQerijGFZCABAO7K5dKeeN9ty24jXnviQ5tYnvVNQaBE2giXqkDajk65ECzRBTZAW0wTEDrbejFwlHNw8cTYG0P2Yh8O21FeUycYCSZAG4KHpMKFplbG6y9FYrQzHzz0SEpZABZCRwouQulaar3rjdzxIul8U8OYMnof7kdyn44aRMDlkT589wgdz3dCqgcZD"
+
+function getName(sender, change) {
+    messageData = {}
+    request({
+        url: 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic&access_token=' + token,
+        qs: {access_token:token},
+        method: 'GET',
+        json: {}
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error getting profile: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        } else {
+            if (change) {
+                sendTextMessage(sender, "Ok, what would you like to change it to?")
+                chooseName(sender, body.first_name, body.last_name)
+            } else {
+                sendTextMessage(sender, "Hello, " + body.first_name + ". Or should I call you Mr. or Mrs. " + body.last_name + "?")
+                chooseName(sender, body.first_name, body.last_name)
+            }
+        }
+    })
+
+}
+
+function sendTextMessage(sender, text) {
+    messageData = {
+        text:text
+    }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:token},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+}
+
+function chooseName(sender, first, last) {
+    messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "button",
+                "text": " ",
+                "buttons": [
+                    {
+                        "type": "postback",
+                        "title": first,
+                        "payload": "Campion"
+                    }, {
+                        "type": "postback",
+                        "title": "Mr. " + last,
+                        "payload": "Mr. Fellin"
+                    }, {
+                        "type": "postback",
+                        "title": "Mrs. " + last,
+                        "payload": "Mrs. Fellin"
+                    }
+                ]
+            }
+
+        }
+    }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:token},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+
+
+}
+
+function sendGenericMessage(sender) {
+    messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [{
+                    "title": "First card",
+                    "subtitle": "Element #1 of an hscroll",
+                    "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
+                    "buttons": [{
+                        "type": "web_url",
+                        "url": "https://www.messenger.com",
+                        "title": "web url"
+                    }, {
+                        "type": "postback",
+                        "title": "Postback",
+                        "payload": "Payload for first element in a generic bubble",
+                    }],
+                }, {
+                    "title": "Second card",
+                    "subtitle": "Element #2 of an hscroll",
+                    "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
+                    "buttons": [{
+                        "type": "postback",
+                        "title": "Postback",
+                        "payload": "Payload for second element in a generic bubble",
+                    }],
+                }]
+            }
+        }
+    }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:token},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+}
+
+
+
+
+
+// Spin up the server
+app.listen(app.get('port'), function() {
+    console.log('running on port', app.get('port'))
+})
+
+
