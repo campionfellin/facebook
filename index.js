@@ -7,7 +7,7 @@ var app = express()
 var nickName = ""
 var tokenWit = 'VZUVI3OXYGU3ABATDOC3J5GTGV3NR5MK'
 
-/*
+
 const Wit = require('node-wit').Wit;
 var tokenWit = 'VZUVI3OXYGU3ABATDOC3J5GTGV3NR5MK'
 
@@ -25,7 +25,7 @@ const actions = {
 };
 
 const client = new Wit(tokenWit, actions);
-*/
+
 
 app.set('port', (process.env.PORT || 5000))
 
@@ -84,7 +84,13 @@ app.post('/webhook/', function (req, res) {
                 }
                 continue
             }
-
+            client.message(text, (error, data) => {
+                if (error) {
+                    console.log('Oops! Got an error: ' + error);
+                } else {
+                    console.log('Yay, got Wit.ai response: ' + JSON.stringify(data));
+                }
+            });
             sendTextMessage(sender, "I received your message, but I don't know what to do with it, sorry!")
         }
         if (event.postback) {
