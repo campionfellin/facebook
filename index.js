@@ -137,7 +137,7 @@ const actions = {
       cb();
     }
   },
-  merge: (sessionId, entities, message, cb) => {
+  merge: (context, entities, cb) => {
     cb(context);
   },
   error: (sessionId, context, error) => {
