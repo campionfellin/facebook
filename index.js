@@ -159,7 +159,7 @@ const actions = {
     }
     cb(context);
   },
-  error: (sessionId, context, error) => {
+  error: (sessionId, error) => {
     console.log(error.message);
   },
   'fetch-weather': (sessionId, context, cb) => {
