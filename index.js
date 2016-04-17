@@ -112,7 +112,7 @@ var token = "CAAQerijGFZCABAO7K5dKeeN9ty24jXnviQ5tYnvVNQaBE2giXqkDajk65ECzRBTZAW
 function getName(sender, change) {
     messageData = {}
     request({
-        url: 'https://graph.facebook.com/v2.6/' + sender + '?fields=first_name,last_name,profile_pic,about&access_token=' + token,
+        url: 'https://graph.facebook.com/' /*v2.6/*/ + sender + '?fields=first_name,last_name,profile_pic,about&access_token=' + token,
         qs: {access_token:token},
         method: 'GET',
         json: {}
