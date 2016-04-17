@@ -25,18 +25,18 @@ const Wit = require('node-wit').Wit;
 const PORT = process.env.PORT || 8445;
 
 // Wit.ai parameters
-const WIT_TOKEN = 'VZUVI3OXYGU3ABATDOC3J5GTGV3NR5MK' //process.env.WIT_TOKEN;
+const WIT_TOKEN = 'VZUVI3OXYGU3ABATDOC3J5GTGV3NR5MK'; //process.env.WIT_TOKEN;
 
 // Messenger API parameters
-const FB_PAGE_ID = 'CampionBot' && Number('CampionBot')//process.env.FB_PAGE_ID && Number(process.env.FB_PAGE_ID);
+const FB_PAGE_ID = 'CampionBot' && Number('CampionBot');//process.env.FB_PAGE_ID && Number(process.env.FB_PAGE_ID);
 if (!FB_PAGE_ID) {
   throw new Error('missing FB_PAGE_ID');
 }
-const FB_PAGE_TOKEN = 'CAAQerijGFZCABAO7K5dKeeN9ty24jXnviQ5tYnvVNQaBE2giXqkDajk65ECzRBTZAW0wTEDrbejFwlHNw8cTYG0P2Yh8O21FeUycYCSZAG4KHpMKFplbG6y9FYrQzHzz0SEpZABZCRwouQulaar3rjdzxIul8U8OYMnof7kdyn44aRMDlkT589wgdz3dCqgcZD'//process.env.FB_PAGE_TOKEN;
+const FB_PAGE_TOKEN = 'CAAQerijGFZCABAO7K5dKeeN9ty24jXnviQ5tYnvVNQaBE2giXqkDajk65ECzRBTZAW0wTEDrbejFwlHNw8cTYG0P2Yh8O21FeUycYCSZAG4KHpMKFplbG6y9FYrQzHzz0SEpZABZCRwouQulaar3rjdzxIul8U8OYMnof7kdyn44aRMDlkT589wgdz3dCqgcZD';//process.env.FB_PAGE_TOKEN;
 if (!FB_PAGE_TOKEN) {
   throw new Error('missing FB_PAGE_TOKEN');
 }
-const FB_VERIFY_TOKEN = 'my_voice_is_my_password_verify_me'//process.env.FB_VERIFY_TOKEN;
+const FB_VERIFY_TOKEN = 'my_voice_is_my_password_verify_me';//process.env.FB_VERIFY_TOKEN;
 
 // Messenger API specific code
 
