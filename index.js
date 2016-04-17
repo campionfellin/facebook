@@ -88,7 +88,7 @@ app.post('/webhook/', function (req, res) {
                 if (error) {
                     console.log('Oops! Got an error: ' + error);
                 } else {
-                    console.log('Yay, got Wit.ai response: ' + JSON.stringify(data));
+                    sendTextMessage(sender, 'Yay, got Wit.ai response: ' + JSON.stringify(data));
                 }
             });
             sendTextMessage(sender, "I received your message, but I don't know what to do with it, sorry!")
