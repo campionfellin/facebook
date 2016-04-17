@@ -140,7 +140,7 @@ const actions = {
   merge: (context, entities, cb) => {
     cb(context);
   },
-  error: (sessionId, context, error) => {
+  error: (sessionId, error) => {
     console.log(error.message);
   },
   // You should implement your custom actions here
