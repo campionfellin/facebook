@@ -144,7 +144,7 @@ const actions = {
     console.log(error.message);
   },
 
-  say: (sessionId, context, message, cb) => {
+  say: (sessionId, message, cb) => {
     console.log(message);
     cb();
   },
