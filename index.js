@@ -84,13 +84,31 @@ app.post('/webhook/', function (req, res) {
                 }
                 continue
             }
+
+            const session = 'my-user-session-42';
+            const context0 = {};
+            client.runActions(session, 'what is the weather in London?', context0, (e, context1) => {
+              if (e) {
+                console.log('Oops! Got an error: ' + e);
+                return;
+              }
+              console.log('The session state is now: ' + JSON.stringify(context1));
+              client.runActions(session, 'and in Brussels?', context1, (e, context2) => {
+                if (e) {
+                  console.log('Oops! Got an error: ' + e);
+                  return;
+                }
+                console.log('The session state is now: ' + JSON.stringify(context2));
+              });
+            });
+            /*
             client.message(text, (error, data) => {
                 if (error) {
                     console.log('Oops! Got an error: ' + error);
                 } else {
                     sendTextMessage(sender, 'Yay, got Wit.ai response: ' + JSON.stringify(data));
                 }
-            });
+            });*/
             sendTextMessage(sender, "I received your message, but I don't know what to do with it, sorry!")
         }
         if (event.postback) {
