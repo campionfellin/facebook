@@ -125,7 +125,7 @@ function getName(sender, change) {
                 sendTextMessage(sender, "Ok, what would you like to change it to?")
                 chooseName(sender, body.first_name, body.last_name)
             } else {
-                sendTextMessage(sender, "Hello, " + body.first_name + ". Or should I call you Mr. or Mrs. " + body.last_name + "?" + body.gender)
+                sendTextMessage(sender, "Hello, " + body.first_name + ". Or should I call you Mr. or Mrs. " + body.last_name + "?")
                 chooseName(sender, body.first_name, body.last_name)
             }
         }
