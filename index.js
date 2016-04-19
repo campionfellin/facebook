@@ -5,7 +5,7 @@ var request = require('request')
 var app = express()
 
 var nickName = ""
-var tokenWit = 'VZUVI3OXYGU3ABATDOC3J5GTGV3NR5MK'
+var tokenWit = 'myWitToken'
 
 
 const Wit = require('node-wit').Wit;
@@ -130,7 +130,7 @@ app.post('/webhook/', function (req, res) {
     res.sendStatus(200)
 })
 
-var token = "CAAQerijGFZCABAO7K5dKeeN9ty24jXnviQ5tYnvVNQaBE2giXqkDajk65ECzRBTZAW0wTEDrbejFwlHNw8cTYG0P2Yh8O21FeUycYCSZAG4KHpMKFplbG6y9FYrQzHzz0SEpZABZCRwouQulaar3rjdzxIul8U8OYMnof7kdyn44aRMDlkT589wgdz3dCqgcZD"
+var token = "myFBToken"
 
 function getName(sender, change) {
     messageData = {}
