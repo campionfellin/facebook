@@ -10,6 +10,12 @@ So far, this is what it does:
   You may greet it with any of ["hi", "hello", "hey", "sup", "whats up", "what's up"]
   
   and it will respond with "Hi ___________" <-- being your nickname.
-  If you don't yet have a nickname, it will say "Hi \<first_name\>"
+  If you don't yet have a nickname, it will say "Hi \<first_name\>" and ask you if you would like
+  to change it to:
+    1. first_name
+    2. Mr. last_name
+    3. Mrs. last_name
+    
+    
 
 
