@@ -13,7 +13,7 @@ So far, this is what it does:
   If you don't yet have a nickname, it will say "Hi \<first_name\>" and ask you if you would like
   to change it to:
     
-    Markup : 1. first_name
+            1. first_name
             2. Mr. last_name
             3. Mrs. last_name
     
